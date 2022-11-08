@@ -115,7 +115,6 @@ class ApplicationController < Sinatra::Base
 
   # PATCH --------------------------------------------------------------------------
   patch '/houses/:id' do
-    binding.pry
     requested_house = House.find_by(id: params[:id])
     if !requested_house.nil?
       expected_entries = get_expected_entries
