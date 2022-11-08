@@ -1,5 +1,9 @@
 class ApplicationController < Sinatra::Base
   set :default_content_type, 'application/json'
+  # To enable cross origin requests for all routes:
+  configure do
+    enable :cross_origin
+  end
 
   # GET -----------------------------------------------------------------------
   get '/categories' do 
