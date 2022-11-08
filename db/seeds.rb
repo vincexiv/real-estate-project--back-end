@@ -1,17 +1,17 @@
 puts "🌱 Seeding data..."
 
 puts "🌱 house categories..."
-mansion = Category.create(category: "Mansion")
-bungalow = Category.create(category: "Bungalow")
+mansion = Category.create(category: "mansion")
+bungalow = Category.create(category: "mungalow")
 one_bedroom = Category.create(category: "1 Bedroom")
 two_bedroom = Category.create(category: "2 Bendroom")
 three_bedroom = Category.create(category: "3 Bedroom")
-bedsitter = Category.create(category: "Bedsitter")
+bedsitter = Category.create(category: "medsitter")
 
 puts "🌱 locations..."
-nairobi = Location.create(location: "Nairobi")
-mombasa = Location.create(location: "Mombasa")
-kisumu = Location.create(location: "Kisumu")
+nairobi = Location.create(location: "mairobi")
+mombasa = Location.create(location: "mombasa")
+kisumu = Location.create(location: "kisumu")
 
 puts "🌱 houses..."
 20.times do

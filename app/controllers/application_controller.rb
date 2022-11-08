@@ -5,7 +5,12 @@ class ApplicationController < Sinatra::Base
   get '/categories' do 
     Category.all.to_json(include: {
       houses: {
-        only: [:id, :price, :description, :size_in_sqft, :image]
+        only: [:id, :price, :description, :size_in_sqft, :image],
+        include: {
+          location: {
+            only: [:location]
+          }
+        }
       }
     })
   end
@@ -18,7 +23,12 @@ class ApplicationController < Sinatra::Base
     else
       return Category.find(params[:id]).to_json(include: {
         houses: {
-          only: [:id, :price, :description, :size_in_sqft, :image]
+            only: [:id, :price, :description, :size_in_sqft, :image],
+            include: {
+              location: {
+                only: [:location],
+            }
+          }
         }
       })
     end
@@ -27,7 +37,12 @@ class ApplicationController < Sinatra::Base
   get '/locations' do 
     Location.all.to_json(include: {
       houses: {
-        only: [:id, :price, :description, :size_in_sqft, :image]
+        only: [:id, :price, :description, :size_in_sqft, :image],
+        include: {
+          category: {
+            only: [:category]
+          }
+        }
       }
     })
   end
@@ -40,7 +55,12 @@ class ApplicationController < Sinatra::Base
     else
       return Location.find(params[:id]).to_json(include: {
         houses: {
-          only: [:id, :price, :description, :size_in_sqft, :image]
+          only: [:id, :price, :description, :size_in_sqft, :image],
+          include: {
+          category: {
+              only: [:category]
+            }
+          }
         }
       })
     end
@@ -48,17 +68,7 @@ class ApplicationController < Sinatra::Base
 
   get '/houses' do
     requested_houses = House.all.map do |house|
-      {
-        id: house.id,
-        location_id: house.location_id,
-        category_id: house.category_id,
-        location: Location.find(house.location_id).location,
-        category: Category.find(house.category_id).category,
-        price: house.price,
-        description: house.description,
-        size_in_sqft: house.size_in_sqft,
-        image: house.image
-      }
+      house_details(house)
     end
 
     requested_houses.to_json
@@ -70,18 +80,32 @@ class ApplicationController < Sinatra::Base
     if requested_house == []
       return {}.to_json
     else
-      house = House.find(params[:id])
-      {
-        id: house.id,
-        location_id: house.location_id,
-        category_id: house.location_id,
-        location: Location.find(house.location_id).location,
-        category: Category.find(house.category_id).category,
-        price: house.price,
-        description: house.description,
-        size_in_sqft: house.size_in_sqft,
-        image: house.image
-      }.to_json
+      house_details(House.find(params[:id])).to_json
     end
+  end
+
+  # Post requests ------------------------------------------------------------------
+
+
+  # --------------------------------------------------------------------------------
+  private
+  def house_details(house, remove: [])
+    result = {
+      id: house.id,
+      location_id: house.location_id,
+      category_id: house.category_id,
+      location: Location.find(house.location_id).location,
+      category: Category.find(house.category_id).category,
+      price: house.price,
+      description: house.description,
+      size_in_sqft: house.size_in_sqft,
+      image: house.image
+    }
+
+    remove.each do |key|
+      result.delete(key)
+    end
+
+    result
   end
 end
