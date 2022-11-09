@@ -139,7 +139,6 @@ class ApplicationController < Sinatra::Base
   # DELETE -------------------------------------------------------------------------
   delete '/houses/:id' do
     requested_house = House.find_by(id: params[:id])
-    binding.pry
     if requested_house.nil?
       return
     else
@@ -150,7 +149,6 @@ class ApplicationController < Sinatra::Base
   # PATCH --------------------------------------------------------------------------
   patch '/houses/:id' do
     requested_house = House.find_by(id: params[:id])
-    binding.pry
 
     if !requested_house.nil?
       requested_house.update(
