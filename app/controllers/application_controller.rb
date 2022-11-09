@@ -100,8 +100,8 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  # POST ---------------------------------------------------------------------------
-  post '/houses' do
+  # PUT ----------------------------------------------------------------------------
+  put '/houses' do
     requested_house = get_house(get_house_details(params))
 
     if requested_house == [] && no_nil_entry(params)
@@ -113,15 +113,33 @@ class ApplicationController < Sinatra::Base
         size_in_sqft: params[:size_in_sqft],
         image: params[:image]        
       )
-      return new_house.to_json
+      return house_details(new_house).to_json
     else
       return requested_house.to_json
+    end
+  end
+
+  # POST ---------------------------------------------------------------------------
+  post '/houses' do
+    requested_house = get_house(get_house_details(params))
+
+    if no_nil_entry(params)
+      new_house = House.create(
+        location_id: get_location(location_name: params[:location]).id,
+        category_id: get_category(category_name: params[:category]).id,
+        price: params[:price],
+        description: params[:description],
+        size_in_sqft: params[:size_in_sqft],
+        image: params[:image]        
+      )
+      return new_house.to_json      
     end
   end
 
   # DELETE -------------------------------------------------------------------------
   delete '/houses/:id' do
     requested_house = House.find_by(id: params[:id])
+    binding.pry
     if requested_house.nil?
       return
     else
@@ -132,26 +150,20 @@ class ApplicationController < Sinatra::Base
   # PATCH --------------------------------------------------------------------------
   patch '/houses/:id' do
     requested_house = House.find_by(id: params[:id])
+    binding.pry
+
     if !requested_house.nil?
-      expected_entries = get_expected_entries
-
-      expected_entries.each do |expected_key|
-        if !params[expected_key.to_sym].nil?
-          if expected_key == "location"
-            location_id = get_location(location_name: params[:location]).id
-            requested_house[:location_id] = params[expected_key.to_sym]
-          elsif expected_key == "category"
-            category_id = get_category(category_name: params[:category]).id
-            requested_house[:category_id] = params[expected_key.to_sym]
-          else
-            requested_house[expected_key.to_sym] = params[expected_key.to_sym]
-          end
-        end
-      end
-
-      requested_house.save
+      requested_house.update(
+        location_id: get_id(get_location(location_name: params[:location]))  || requested_house.location_id,
+        category_id: get_id(get_category(category_name: params[:category])) || requested_house.category_id,
+        price: params[:price] || requested_house.price,
+        description: params[:description] || requested_house.description,
+        size_in_sqft: params[:size_in_sqft] || requested_house.size_in_sqft,
+        image: params[:image] || requested_house.image
+      )
     end
-    requested_house.to_json
+
+    house_details(requested_house).to_json
   end
 
 
@@ -162,8 +174,8 @@ class ApplicationController < Sinatra::Base
       id: house.id,
       location_id: house.location_id,
       category_id: house.category_id,
-      location: Location.find(house.location_id).location,
-      category: Category.find(house.category_id).category,
+      location: Location.find_by(id: house.location_id).location,
+      category: Category.find_by(id: house.category_id).category,
       price: house.price,
       description: house.description,
       size_in_sqft: house.size_in_sqft,
@@ -178,6 +190,7 @@ class ApplicationController < Sinatra::Base
   end
 
   def get_location(location_name:)
+    if location_name.is_a?(String)
       location = Location.find_by(location: location_name)
       location_exists = !location.nil?
       if location_exists
@@ -185,16 +198,23 @@ class ApplicationController < Sinatra::Base
       else
         return Location.create(location: location_name)
       end
+    else
+      nil
+    end
   end
 
   def get_category(category_name:)
-    category = Category.find_by(category: category_name)
-    category_exists = !category.nil?
-    if category_exists
-      return category
+    if category_name.is_a?(String)
+      category = Category.find_by(category: category_name)
+      category_exists = !category.nil?
+      if category_exists
+        return category
+      else
+        return Category.create(category: category_name)
+      end     
     else
-      return Category.create(category: category_name)
-    end     
+      nil
+    end
   end
 
   def get_house(house_details)
@@ -212,7 +232,7 @@ class ApplicationController < Sinatra::Base
       end
     end
     
-      #remove the last comma
+      #remove the last AND
       base_sql[0..-5]
   end
 
@@ -252,17 +272,6 @@ class ApplicationController < Sinatra::Base
     ]
   end
 
-  def get_expected_entries
-    [
-      "location_id",
-      "category_id",
-      "price",
-      "description",
-      "size_in_sqft",
-      "image"
-    ]
-  end
-
   def no_nil_entry(params)
     expected_entries = get_expected_entries
 
@@ -273,5 +282,13 @@ class ApplicationController < Sinatra::Base
     end
 
     return true
+  end
+
+  def get_id(attr)
+    if attr
+      attr.id
+    else
+      nil
+    end
   end
 end
