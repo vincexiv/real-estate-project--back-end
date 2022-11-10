@@ -218,6 +218,28 @@ class ApplicationController < Sinatra::Base
   end
 
 
+  # ALL OTHER ROUTES ---------------------------------------------------------------
+  get '/*' do
+    get_endpoint_error_message(request_name: "get").to_json
+  end
+
+  patch '/*' do
+    get_endpoint_error_message(request_name: "patch").to_json
+  end
+
+  post '/*' do
+    get_endpoint_error_message(request_name: "post").to_json
+  end
+
+  put '/*' do
+    get_endpoint_error_message(request_name: "put").to_json
+  end
+
+  delete '/*' do
+    get_endpoint_error_message(request_name: "delete").to_json
+  end
+
+
   # ================================================================================
   private
   def house_details(house, remove: [])
@@ -364,5 +386,9 @@ class ApplicationController < Sinatra::Base
     else
       nil
     end
+  end
+
+  def get_endpoint_error_message(request_name:)
+    {EndpointError: "The endpoint you are using can't be accessed with a #{request_name} request"}
   end
 end
