@@ -172,7 +172,6 @@ class ApplicationController < Sinatra::Base
 
   # POST ---------------------------------------------------------------------------
   post '/houses' do
-    binding.pry
     requested_house = get_house(get_house_details(params))
 
     if no_nil_entry(params)
