@@ -8,10 +8,17 @@ four_bedroom = Category.create(category: "4 bedroom")
 five_bedroom = Category.create(category: "5 bedroom")
 
 puts "🌱 locations..."
-nairobi = Location.create(location: "mairobi")
+nairobi = Location.create(location: "nairobi")
 mombasa = Location.create(location: "mombasa")
 kakamega = Location.create(location: "kakamega")
 kisumu = Location.create(location: "kisumu")
+
+puts "🌱 sellers..."
+vincent = Seller.create(name: "vincent")
+rajab = Seller.create(name: "rajab")
+zablon = Seller.create(name: "zablon")
+mercy = Seller.create(name: "mercy")
+andrew = Seller.create(name: "andrew")
 
 puts "🌱 houses..."
 
@@ -49,6 +56,7 @@ houses.length.times do |i|
   House.create(
     location_id: [nairobi, mombasa, kakamega, kisumu].sample.id,
     category_id: [studio, two_bedroom, three_bedroom, four_bedroom, five_bedroom].sample.id,
+    seller_id: [andrew, mercy, vincent, rajab, zablon].sample.id,
     price: rand(10000..150000).to_f,
     description: Faker::Lorem.paragraph(sentence_count: rand(2..5)),
     size_in_sqft: rand(500..10000),
@@ -56,5 +64,7 @@ houses.length.times do |i|
     # image: "https://via.placeholder.com/#{rand(500..1000)}x#{rand(200..700)}"
   )
 end
+
+
 
 puts "🌱 Done seeding!"

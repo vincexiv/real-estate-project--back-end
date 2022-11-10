@@ -18,6 +18,38 @@ class ApplicationController < Sinatra::Base
   end
 
   # GET -----------------------------------------------------------------------
+    get '/sellers' do 
+    Seller.all.to_json(include: {
+      houses: {
+        only: [:id, :price, :description, :size_in_sqft, :image],
+        include: {
+          location: {
+            only: [:location]
+          }
+        }
+      }
+    })
+  end
+
+  get '/sellers/:id' do
+    requested_category = Seller.where(:id => params[:id])
+
+    if requested_category == []
+      return {}.to_json
+    else
+      return Seller.find(params[:id]).to_json(include: {
+        houses: {
+            only: [:id, :price, :description, :size_in_sqft, :image],
+            include: {
+              location: {
+                only: [:location],
+            }
+          }
+        }
+      })
+    end
+  end
+
   get '/categories' do 
     Category.all.to_json(include: {
       houses: {
