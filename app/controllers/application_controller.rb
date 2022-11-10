@@ -225,6 +225,7 @@ class ApplicationController < Sinatra::Base
       id: house.id,
       location_id: house.location_id,
       category_id: house.category_id,
+      seller_id: house.seller_id,
       location: Location.find_by(id: house.location_id).location,
       category: Category.find_by(id: house.category_id).category,
       seller: Seller.find_by(id: house.seller_id).name,
