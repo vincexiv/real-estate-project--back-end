@@ -7,6 +7,8 @@ class ApplicationController < Sinatra::Base
   end
   before do
     response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = '*'
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS, PUT, DELETE"
   end
   
   # routes...
@@ -192,9 +194,10 @@ class ApplicationController < Sinatra::Base
   delete '/houses/:id' do
     requested_house = House.find_by(id: params[:id])
     if requested_house.nil?
-      return
+      return {}.to_json
     else
       requested_house.destroy
+      return {}.to_json
     end
   end
 
