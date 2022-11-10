@@ -172,6 +172,7 @@ class ApplicationController < Sinatra::Base
 
   # POST ---------------------------------------------------------------------------
   post '/houses' do
+    binding.pry
     requested_house = get_house(get_house_details(params))
 
     if no_nil_entry(params)
@@ -317,10 +318,12 @@ class ApplicationController < Sinatra::Base
   def get_house_details(params)
     location = get_location(location_name: params[:location])
     category = get_category(category_name: params[:category])
+    seller = get_seller(seller_name: params[:seller])
     
     house_details = {
         location_id: location.id,
         category_id: category.id,
+        seller_id: seller.id,
         price: params[:price],
         description: params[:description],
         size_in_sqft: params[:size_in_sqft],
