@@ -332,6 +332,7 @@ class ApplicationController < Sinatra::Base
     [
       "location",
       "category",
+      "seller",
       "price",
       "description",
       "size_in_sqft",
