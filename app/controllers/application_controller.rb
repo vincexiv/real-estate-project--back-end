@@ -221,25 +221,29 @@ class ApplicationController < Sinatra::Base
   # ================================================================================
   private
   def house_details(house, remove: [])
-    result = {
-      id: house.id,
-      location_id: house.location_id,
-      category_id: house.category_id,
-      seller_id: house.seller_id,
-      location: Location.find_by(id: house.location_id).location,
-      category: Category.find_by(id: house.category_id).category,
-      seller: Seller.find_by(id: house.seller_id).name,
-      price: house.price,
-      description: house.description,
-      size_in_sqft: house.size_in_sqft,
-      image: house.image
-    }
+    if(house.nil?)
+      {}.to_json
+    else
+      result = {
+        id: house.id,
+        location_id: house.location_id,
+        category_id: house.category_id,
+        seller_id: house.seller_id,
+        location: Location.find_by(id: house.location_id).location,
+        category: Category.find_by(id: house.category_id).category,
+        seller: Seller.find_by(id: house.seller_id).name,
+        price: house.price,
+        description: house.description,
+        size_in_sqft: house.size_in_sqft,
+        image: house.image
+      }
 
-    remove.each do |key|
-      result.delete(key)
+      remove.each do |key|
+        result.delete(key)
+      end
+
+      result
     end
-
-    result
   end
 
     def get_seller(seller_name:)
