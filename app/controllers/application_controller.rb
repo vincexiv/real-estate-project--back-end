@@ -25,6 +25,9 @@ class ApplicationController < Sinatra::Base
         include: {
           location: {
             only: [:location]
+          },
+          category: {
+            only: [:category]
           }
         }
       }
@@ -43,7 +46,10 @@ class ApplicationController < Sinatra::Base
             include: {
               location: {
                 only: [:location],
-            }
+              },
+              category: {
+                only: [:category]
+              }
           }
         }
       })
@@ -57,6 +63,9 @@ class ApplicationController < Sinatra::Base
         include: {
           location: {
             only: [:location]
+          },
+          seller: {
+            only: [:name]
           }
         }
       }
@@ -75,7 +84,10 @@ class ApplicationController < Sinatra::Base
             include: {
               location: {
                 only: [:location],
-            }
+              },
+              seller: {
+                only: [:name]
+              }
           }
         }
       })
@@ -89,6 +101,9 @@ class ApplicationController < Sinatra::Base
         include: {
           category: {
             only: [:category]
+          },
+          seller: {
+            only: [:name]
           }
         }
       }
@@ -105,8 +120,11 @@ class ApplicationController < Sinatra::Base
         houses: {
           only: [:id, :price, :description, :size_in_sqft, :image],
           include: {
-          category: {
+            category: {
               only: [:category]
+            },
+            seller: {
+              only: [:name]
             }
           }
         }
@@ -140,6 +158,7 @@ class ApplicationController < Sinatra::Base
       new_house = House.create(
         location_id: get_location(location_name: params[:location]).id,
         category_id: get_category(category_name: params[:category]).id,
+        seller_id: get_seller(seller_name: params[:seller]).id,
         price: params[:price],
         description: params[:description],
         size_in_sqft: params[:size_in_sqft],
@@ -159,6 +178,7 @@ class ApplicationController < Sinatra::Base
       new_house = House.create(
         location_id: get_location(location_name: params[:location]).id,
         category_id: get_category(category_name: params[:category]).id,
+        seller_id: get_seller(seller_name: params[:seller]).id,
         price: params[:price],
         description: params[:description],
         size_in_sqft: params[:size_in_sqft],
@@ -186,6 +206,7 @@ class ApplicationController < Sinatra::Base
       requested_house.update(
         location_id: get_id(get_location(location_name: params[:location]))  || requested_house.location_id,
         category_id: get_id(get_category(category_name: params[:category])) || requested_house.category_id,
+        seller_id: get_id(get_seller(seller_name: params[:seller])) || requested_house.seller_id,
         price: params[:price] || requested_house.price,
         description: params[:description] || requested_house.description,
         size_in_sqft: params[:size_in_sqft] || requested_house.size_in_sqft,
@@ -206,6 +227,7 @@ class ApplicationController < Sinatra::Base
       category_id: house.category_id,
       location: Location.find_by(id: house.location_id).location,
       category: Category.find_by(id: house.category_id).category,
+      seller: Seller.find_by(id: house.seller_id).name,
       price: house.price,
       description: house.description,
       size_in_sqft: house.size_in_sqft,
@@ -217,6 +239,20 @@ class ApplicationController < Sinatra::Base
     end
 
     result
+  end
+
+    def get_seller(seller_name:)
+    if seller_name.is_a?(String)
+      seller = Seller.find_by(name: seller_name)
+      seller_exists = !seller.nil?
+      if seller_exists
+        return seller
+      else
+        return Seller.create(name: seller_name)
+      end
+    else
+      nil
+    end
   end
 
   def get_location(location_name:)
