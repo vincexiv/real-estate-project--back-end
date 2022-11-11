@@ -2,7 +2,7 @@ puts "🌱 Seeding data..."
 
 puts "🌱 house categories..."
 studio = Category.create(category: "studio")
-two_bedroom = Category.create(category: "2 bendroom")
+two_bedroom = Category.create(category: "2 bedroom")
 three_bedroom = Category.create(category: "3 bedroom")
 four_bedroom = Category.create(category: "4 bedroom")
 five_bedroom = Category.create(category: "5 bedroom")
@@ -19,6 +19,18 @@ rajab = Seller.create(name: "rajab")
 zablon = Seller.create(name: "zablon")
 mercy = Seller.create(name: "mercy")
 andrew = Seller.create(name: "andrew")
+
+puts "🌱 buyers..."
+
+  Buyer.create(
+    firstname:"Mercy",
+    lastname:"Mercy",
+    phonenumber:"072222222",
+    message:"I want a house"
+  )
+
+
+
 
 puts "🌱 houses..."
 

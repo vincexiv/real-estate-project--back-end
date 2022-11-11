@@ -134,6 +134,33 @@ class ApplicationController < Sinatra::Base
     end
   end
 
+  get '/buyers' do 
+    Buyer.all.to_json
+  end
+
+  # get '/buyers' do
+  #   requested_buyers = Buyer.all.map do |buyer|
+  #     buyer_details(buyer)
+  #   end
+
+  #   requested_buyers.to_json
+  # end
+
+  # post '/buyers' do
+  #   requested_buyer = get_buyer(get_buyer_details(params))
+
+  #   if no_nil_entry(params)
+  #     new_buyer= Buyer.create(
+  #       firstname: params[:firstname],
+  #       lastname:params[:lastname],
+  #       phonenumber: params[:phonenumber]),
+  #       message: params[:message]      
+  #     )
+  #     return new_buyer.to_json      
+  #   end
+  # end
+
+
   get '/houses' do
     requested_houses = House.all.map do |house|
       house_details(house)
