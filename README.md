@@ -6,8 +6,8 @@ This api provides endpoints through which data regarding house for sell can be o
 ## Date of Current Version
 November 9, 2022
 
-## Done by
-[vincent Makokha](https://github.com/VinceXIV/)
+<!-- ## Done by -->
+<!-- [vincent Makokha](https://github.com/VinceXIV/) -->
 <!-- [Andrew Ochieng](https://github.com/Andrew-Ochieng)
 [Mercy Cheruiyot](https://github.com/Mercy-Cheruiyot)
 [Rajab Karume](https://github.com/RajabKarume)
