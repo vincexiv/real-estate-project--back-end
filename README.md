@@ -8,10 +8,10 @@ November 9, 2022
 
 ## Done by
 [vincent Makokha](https://github.com/VinceXIV/)
-[Andrew Ochieng](https://github.com/Andrew-Ochieng)
+<!-- [Andrew Ochieng](https://github.com/Andrew-Ochieng)
 [Mercy Cheruiyot](https://github.com/Mercy-Cheruiyot)
 [Rajab Karume](https://github.com/RajabKarume)
-[Zablon Onchari Nyabuto](https://github.com/Zablon-Onchari-Nyabuto)
+[Zablon Onchari Nyabuto](https://github.com/Zablon-Onchari-Nyabuto) -->
 
 ## Description
 These are the things that you will be able to do using this api, and how you can get it working
